@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Featured from "components/Featured";
+import FilmCardButtons from "./FilmCardButtons";
 
 const FilmCard = ({ film }) => {
   const [descriptionVisible, setDescriptionVisible] = useState(false);
@@ -36,16 +37,7 @@ const FilmCard = ({ film }) => {
           className={`icon eye link ${descriptionVisible && "slash"}`}
           onClick={handleDescription}></i>
       </div>
-      <div className='extra content'>
-        <div className='ui two buttons'>
-          <span className='ui green basic button'>
-            <i className='ui icon edit'></i>
-          </span>
-          <span className='ui red basic button'>
-            <i className='ui icon trash'></i>
-          </span>
-        </div>
-      </div>
+      {/* <FilmCardButtons film={film} /> */}
     </div>
   );
 };

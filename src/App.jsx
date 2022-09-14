@@ -3,7 +3,7 @@ import _orderBy from "lodash/orderBy";
 import { items } from "data";
 import FilmsList from "pages/FilmsPage/components/FilmsList";
 import FilmContext from "contexts/FilmContext";
-import FilmForm from "pages/FilmsPage/components/FilmForm";
+import { FilmForm1, FilmForm2 } from "pages/FilmsPage/components/FilmForm";
 
 const sortFilms = (films) =>
   _orderBy(films, ["featured", "title"], ["desc", "asc"]);
@@ -30,8 +30,9 @@ const App = () => {
   return (
     <div className='ui container mt-3'>
       <FilmContext.Provider value={value}>
-        {/* <FilmsList films={films} /> */}
-        <FilmForm />
+        <FilmsList films={films} />
+        <FilmForm1 />
+        <FilmForm2 />
       </FilmContext.Provider>
     </div>
   );
