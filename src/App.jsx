@@ -30,7 +30,7 @@ const App = () => {
   return (
     <div className='ui container mt-3'>
       <FilmContext.Provider value={value}>
-        <FilmsList films={films} />
+        {/* <FilmsList films={films} /> */}
         <FilmForm />
       </FilmContext.Provider>
     </div>
