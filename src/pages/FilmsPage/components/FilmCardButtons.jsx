@@ -1,31 +1,31 @@
-// import React, { useContext } from "react";
-// import FilmContext from "contexts/FilmContext";
+import React, { useContext } from "react";
+import FilmContext from "contexts/FilmContext";
+import PropTypes from "prop-types";
 
-// const SelectButton = ({film}) => {
-//     const {selectedFilmToEdit} = useContext(FilmContext);
-//     const selectFilm = () => selectedFilmToEdit(film);
+const SelectButton = ({ film }) => {
+	// return ()
+};
 
-//     return (
+const FilmCardButtons = ({ film }) => {
+	const { selectedFilmForEdit } = useContext(FilmContext);
+	const selectFilm = () => selectedFilmForEdit(film);
 
-//     )
-// }
+	return (
+		<div className='extra content'>
+			<div className='ui two buttons'>
+				<span onClick={selectFilm} className='ui green basic button'>
+					<i className='ui icon edit'></i>
+				</span>
+				<span className='ui red basic button'>
+					<i className='ui icon trash'></i>
+				</span>
+			</div>
+		</div>
+	);
+};
 
-// const FilmCardButtons = ({film}) => {
-//   //   const { selectedFilmForEdit } = useContext(FilmContext);
-//   //   const selectedFilm = () => selectedFilmForEdit(film);
+FilmCardButtons.propTypes = {
+	film: PropTypes.object.isRequired,
+};
 
-//   return (
-//     <div className='extra content'>
-//       <div className='ui two buttons'>
-//         <span className='ui green basic button'>
-//           <i className='ui icon edit'></i>
-//         </span>
-//         <span className='ui red basic button'>
-//           <i className='ui icon trash'></i>
-//         </span>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FilmCardButtons;
+export default FilmCardButtons;
