@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { genres, tags as tagsList } from "data";
 import ImageLoader from "components/ImageLoader";
 import FormMessage from "components/FormMessage";
-import { object } from "prop-types";
+import PropTypes from "prop-types";
 
 const initialData = {
   title: "",
@@ -14,7 +14,7 @@ const initialData = {
   featured: false,
 };
 
-export const FilmForm1 = () => {
+const FilmForm = ({ hideForm }) => {
   const [data, setData] = useState(initialData);
   const [errors, setErrors] = useState({});
   const photoRef = useRef();
@@ -191,118 +191,124 @@ export const FilmForm1 = () => {
             Save
           </button>
           <div className='or'></div>
-          <span className='ui button'>Hide form</span>
+          <span className='ui button' onClick={hideForm}>
+            Hide form
+          </span>
         </div>
       </div>
     </form>
   );
 };
 
-export const FilmForm2 = () => {
-  const [tags, setTags] = useState([]);
-  const [genre, setGenre] = useState("");
-  const [select, setSelect] = useState("");
-  const [multiSelect, setMultiSelect] = useState([]);
+// const FilmForm = () => {
+//   const [tags, setTags] = useState([]);
+//   const [genre, setGenre] = useState("");
+//   const [select, setSelect] = useState("");
+//   const [multiSelect, setMultiSelect] = useState([]);
 
-  const handleTagsChange = (id) => {
-    setTags((x) => (x.includes(id) ? x.filter((v) => v !== id) : [...x, id]));
-  };
+//   const handleTagsChange = (id) => {
+//     setTags((x) => (x.includes(id) ? x.filter((v) => v !== id) : [...x, id]));
+//   };
 
-  const handleGenreChange = (genre) => {
-    setGenre(genre);
-  };
+//   const handleGenreChange = (genre) => {
+//     setGenre(genre);
+//   };
 
-  const handleSelectChange = (e) => {
-    const { value } = e.target;
+//   const handleSelectChange = (e) => {
+//     const { value } = e.target;
 
-    if (Number(value) === -1) {
-      alert("Choose option");
-      return;
-    }
-    setSelect(value);
-  };
+//     if (Number(value) === -1) {
+//       alert("Choose option");
+//       return;
+//     }
+//     setSelect(value);
+//   };
 
-  const handleMultiSelect = (e) => {
-    const multipleSelect = [...e.target.selectedOptions].map(
-      (option) => option.value
-    );
-    setMultiSelect(multipleSelect);
-  };
+//   const handleMultiSelect = (e) => {
+//     const multipleSelect = [...e.target.selectedOptions].map(
+//       (option) => option.value
+//     );
+//     setMultiSelect(multipleSelect);
+//   };
 
-  return (
-    <form className='ui form'>
-      <div className='ui grid'>
-        <div className='four wide column'>
-          {/*  =========================  tags  ================  */}
-          <div className='grouped fields'>
-            <label>Tags</label>
+//   return (
+//     <form className='ui form'>
+//       <div className='ui grid'>
+//         <div className='four wide column'>
+//           {/*  =========================  tags  ================  */}
+//           <div className='grouped fields'>
+//             <label>Tags</label>
 
-            {tagsList.map((tag) => (
-              <div className='field' key={tag._id}>
-                <div className='ui checkbox field'>
-                  <input
-                    type='checkbox'
-                    id={`tag-${tag._id}`}
-                    onChange={() => handleTagsChange(tag._id)}
-                    checked={tags.includes(tag._id)}
-                  />
-                  <label htmlFor={`tag-${tag._id}`}>{tag.title}</label>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/*  ==============================   genre ================  */}
-        <div className='four wide column'>
-          <div className='grouped fields'>
-            <label>Genres</label>
-            {genres.map((genre) => (
-              <div key={genre._id} className='ui radio checkbox field'>
-                <input
-                  onChange={() => handleGenreChange(genre._id)}
-                  checked={genre === genre._id}
-                  id={`genre-${genre._id}`}
-                  type='radio'
-                  name='example2'
-                />
-                <label htmlFor={`genre-${genre._id}`}>{genre.title}</label>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/*  ============================== select ================  */}
-        <div className='four wide column'>
-          <select
-            className='ui dropdown'
-            value={select}
-            onChange={handleSelectChange}>
-            <option value='-1'>Select</option>
-            {genres.map((genre) => (
-              <option key={genre._id} value={genre._id}>
-                {genre.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/*  ==============================  multipleSelect ================  */}
-        <div className='four wide column'>
-          <select
-            multiple
-            size={genres.length}
-            value={multiSelect}
-            onChange={handleMultiSelect}>
-            {genres.map((genre) => (
-              <option value={genre._id} key={genre._id}>
-                {genre.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+//             {tagsList.map((tag) => (
+//               <div className='field' key={tag._id}>
+//                 <div className='ui checkbox field'>
+//                   <input
+//                     type='checkbox'
+//                     id={`tag-${tag._id}`}
+//                     onChange={() => handleTagsChange(tag._id)}
+//                     checked={tags.includes(tag._id)}
+//                   />
+//                   <label htmlFor={`tag-${tag._id}`}>{tag.title}</label>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//         {/*  ==============================   genre ================  */}
+//         <div className='four wide column'>
+//           <div className='grouped fields'>
+//             <label>Genres</label>
+//             {genres.map((genre) => (
+//               <div key={genre._id} className='ui radio checkbox field'>
+//                 <input
+//                   onChange={() => handleGenreChange(genre._id)}
+//                   checked={genre === genre._id}
+//                   id={`genre-${genre._id}`}
+//                   type='radio'
+//                   name='example2'
+//                 />
+//                 <label htmlFor={`genre-${genre._id}`}>{genre.title}</label>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//         {/*  ============================== select ================  */}
+//         <div className='four wide column'>
+//           <select
+//             className='ui dropdown'
+//             value={select}
+//             onChange={handleSelectChange}>
+//             <option value='-1'>Select</option>
+//             {genres.map((genre) => (
+//               <option key={genre._id} value={genre._id}>
+//                 {genre.title}
+//               </option>
+//             ))}
+//           </select>
+//         </div>
+//         {/*  ==============================  multipleSelect ================  */}
+//         <div className='four wide column'>
+//           <select
+//             multiple
+//             size={genres.length}
+//             value={multiSelect}
+//             onChange={handleMultiSelect}>
+//             {genres.map((genre) => (
+//               <option value={genre._id} key={genre._id}>
+//                 {genre.title}
+//               </option>
+//             ))}
+//           </select>
+//         </div>
+//       </div>
 
-      {/* ====================================================== */}
-    </form>
-  );
+//       {/* ====================================================== */}
+//     </form>
+//   );
+// };
+
+FilmForm.propTypes = {
+  hideForm: PropTypes.func.isRequired,
 };
 
-// export default FilmForm;
+export default FilmForm;
