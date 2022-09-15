@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { genres, tags as tagsList } from "data";
 import ImageLoader from "components/ImageLoader";
+import FormMessage from "components/FormMessage";
+import { object } from "prop-types";
 
 const initialData = {
   title: "",
@@ -14,6 +16,7 @@ const initialData = {
 
 export const FilmForm1 = () => {
   const [data, setData] = useState(initialData);
+  const [errors, setErrors] = useState({});
   const photoRef = useRef();
 
   const updatePhoto = (e) => {
@@ -27,29 +30,50 @@ export const FilmForm1 = () => {
 
   const handleStringChange = (e) => {
     setData((x) => ({ ...x, [e.target.name]: e.target.value }));
+    setErrors((x) => ({ ...x, [e.target.name]: "" }));
   };
 
   const handleNumberChange = (e) => {
     let value = parseFloat(e.target.value);
     value = isNaN(value) || value === 0 ? "" : Math.abs(value);
     setData((x) => ({ ...x, [e.target.name]: value }));
+    setErrors((x) => ({ ...x, [e.target.name]: "" }));
   };
 
   const handleCheckboxChange = (e) => {
     setData((x) => ({ ...x, [e.target.name]: e.target.checked }));
   };
 
+  const validate = (data) => {
+    const errors = {};
+
+    if (!data.title) errors.title = "Title cannot be blank";
+    if (!data.img) errors.img = "Image cannot be blank";
+    if (!data.description) errors.description = "Description cannot be blank";
+    if (!data.director) errors.director = "Director cannot be blank";
+    if (!data.duration) errors.duration = "Duration cannot be blank";
+    if (!data.price) errors.price = "Price cannot be blank";
+    if (parseInt(data.price) <= 0) errors.price = "Price must be higher than 0";
+
+    return errors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    const errors = validate(data);
+    setErrors(errors);
+    if (Object.keys(errors).length === 0) {
+      console.log(data);
+      setData(initialData);
+    }
   };
 
   return (
-    <form className='ui form'>
+    <form onSubmit={handleSubmit} className='ui form'>
       <div className='ui grid mb-3'>
         <div className='two column row'>
           <div className='ten wide column'>
-            <div className='field'>
+            <div className={`field column ${errors.title ? "error" : ""}`}>
               <label htmlFor='title'>Film title</label>
               <input
                 value={data.title}
@@ -59,10 +83,10 @@ export const FilmForm1 = () => {
                 id='title'
                 placeholder='film title'
               />
-              <div style={{ color: "#9a3f38" }}>title error</div>
+              {errors.title && <FormMessage>{errors.title}</FormMessage>}
             </div>
 
-            <div className='field img-grid'>
+            <div className={`field img-grid ${errors.img ? "error" : ""}`}>
               <label htmlFor='img'>Image</label>
               <input
                 value={data.img}
@@ -70,6 +94,7 @@ export const FilmForm1 = () => {
                 name='img'
                 id='img'
               />
+              {errors.img && <FormMessage>{errors.img}</FormMessage>}
 
               <div className='inp-file'>
                 <label htmlFor='photo'>Photo</label>
@@ -82,7 +107,10 @@ export const FilmForm1 = () => {
               </div>
             </div>
 
-            <div className='column row field'>
+            <div
+              className={`column row field ${
+                errors.description ? "error" : ""
+              }`}>
               <label htmlFor='description'>Film description</label>
               <textarea
                 value={data.description}
@@ -91,20 +119,23 @@ export const FilmForm1 = () => {
                 id='description'
                 placeholder='film description'></textarea>
             </div>
+            {errors.description && (
+              <FormMessage>{errors.description}</FormMessage>
+            )}
           </div>
 
           <div className='six wide column'>
             <ImageLoader
               src={data.img}
               alt={data.title}
-              fallbackImg='http://via.placeholder.com/250x250'
+              fallbackImg='https://via.placeholder.com/250x250'
               className='ui image imgfit'
             />
           </div>
         </div>
 
-        <div className='three column row'>
-          <div className='column field'>
+        <div className='three column row mb-3'>
+          <div className={`column field ${errors.director ? "error" : ""}`}>
             <label htmlFor='director'>Director</label>
             <input
               value={data.director}
@@ -114,9 +145,10 @@ export const FilmForm1 = () => {
               id='director'
               placeholder='film director'
             />
+            {errors.director && <FormMessage>{errors.director}</FormMessage>}
           </div>
 
-          <div className='column field'>
+          <div className={`column field ${errors.duration ? "error" : ""}`}>
             <label htmlFor='duration'>Duration</label>
             <input
               value={data.duration}
@@ -126,9 +158,10 @@ export const FilmForm1 = () => {
               id='duration'
               placeholder='Duration'
             />
+            {errors.duration && <FormMessage>{errors.duration}</FormMessage>}
           </div>
 
-          <div className='column field'>
+          <div className={`column field ${errors.price ? "error" : ""}`}>
             <label htmlFor='price'>Price</label>
             <input
               value={data.price}
@@ -138,6 +171,7 @@ export const FilmForm1 = () => {
               id='price'
               placeholder='price'
             />
+            {errors.price && <FormMessage>{errors.price}</FormMessage>}
           </div>
         </div>
 
