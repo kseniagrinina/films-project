@@ -1,22 +1,22 @@
-import React from "react";
+import { memo } from "react";
 import PropTypes from "prop-types";
 
 const TopNavigation = ({ showForm }) => {
-  return (
-    <div className='ui secondary pointing menu'>
-      <a href='/' className='item'>
-        Home
-      </a>
-      <span className='item' onClick={showForm}>
-        <i className='icon plus'></i>
-        Add new film
-      </span>
-    </div>
-  );
+	return (
+		<div className='ui secondary pointing menu'>
+			<a href='/' className='item'>
+				Home
+			</a>
+			<span className='item' onClick={showForm}>
+				<i className='icon plus'></i>
+				Add new film
+			</span>
+		</div>
+	);
 };
 
 TopNavigation.protoTypes = {
-  showForm: PropTypes.func.isRequired,
+	showForm: PropTypes.func.isRequired,
 };
 
-export default TopNavigation;
+export default memo(TopNavigation);

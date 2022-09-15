@@ -57,12 +57,16 @@ const App = () => {
 		film._id ? updateFilm(film) : addFilm(film);
 	};
 
+	const deleteFilm = (film) => {
+		setFilms((x) => sortFilms(x.filter((f) => f._id !== film._id)));
+	};
+
 	const selectedFilmForEdit = (selectedFilm) => {
 		setSelectedFilm(selectedFilm);
 		setShowAddForm(true);
 	};
 
-	const value = { toggleFeatured, selectedFilmForEdit };
+	const value = { toggleFeatured, selectedFilmForEdit, deleteFilm };
 
 	return (
 		<div className='ui container mt-3'>
