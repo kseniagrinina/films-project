@@ -1,8 +1,7 @@
-import { useState, useRef } from "react";
-// import { genres, tags as tagsList } from "data";
-import ImageLoader from "components/ImageLoader";
+import { useState } from "react";
 import FormMessage from "components/FormMessage";
 import PropTypes from "prop-types";
+import UploadImage from "components/UploadImage";
 
 const initialData = {
 	_id: null,
@@ -18,7 +17,6 @@ const initialData = {
 const FilmForm = ({ hideForm, saveFilm, film }) => {
 	const [data, setData] = useState(initialData);
 	const [errors, setErrors] = useState({});
-	const photoRef = useRef();
 
 	if (film._id && film._id !== data._id) {
 		setData(film);
@@ -27,13 +25,9 @@ const FilmForm = ({ hideForm, saveFilm, film }) => {
 		setData(initialData);
 	}
 
-	const updatePhoto = (e) => {
-		const file = photoRef.current.files && photoRef.current.files[0];
-
-		if (file) {
-			const img = "/img/" + file.name;
-			setData((x) => ({ ...x, img }));
-		}
+	const updatePhoto = (img) => {
+		setData((x) => ({ ...x, img }));
+		setErrors((x) => ({ ...x, img: "" }));
 	};
 
 	const handleStringChange = (e) => {
@@ -104,16 +98,6 @@ const FilmForm = ({ hideForm, saveFilm, film }) => {
 								id='img'
 							/>
 							{errors.img && <FormMessage>{errors.img}</FormMessage>}
-
-							<div className='inp-file'>
-								<label htmlFor='photo'>Photo</label>
-								<input
-									ref={photoRef}
-									onChange={updatePhoto}
-									type='file'
-									id='photo'
-								/>
-							</div>
 						</div>
 
 						<div
@@ -134,12 +118,7 @@ const FilmForm = ({ hideForm, saveFilm, film }) => {
 					</div>
 
 					<div className='six wide column'>
-						<ImageLoader
-							src={data.img}
-							alt={data.title}
-							fallbackImg='https://via.placeholder.com/250x250'
-							className='ui image imgfit'
-						/>
+						<UploadImage img={data.img} updatePhoto={updatePhoto} />
 					</div>
 				</div>
 
