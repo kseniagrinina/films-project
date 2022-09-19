@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { genres, tags as tagsList } from "data";
+// import { genres, tags as tagsList } from "data";
 import ImageLoader from "components/ImageLoader";
 import FormMessage from "components/FormMessage";
 import PropTypes from "prop-types";

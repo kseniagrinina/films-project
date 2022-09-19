@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import _orderBy from "lodash/orderBy";
-import { items } from "data";
 import FilmContext from "contexts/FilmContext";
 import FilmForm from "pages/FilmsPage/components/FilmForm";
 import FilmsList from "pages/FilmsPage/components/FilmsList";
 import TopNavigation from "components/TopNavigation";
 import { generate as id } from "shortid";
-import LoginForm from "pages/LoginPage/components/LoginForm";
-import SignupForm from "pages/SignupPage/components/SignupForm";
+// import LoginForm from "pages/LoginPage/components/LoginForm";
+// import SignupForm from "pages/SignupPage/components/SignupForm";
+import api from "api";
 
 const sortFilms = (films) =>
 	_orderBy(films, ["featured", "title"], ["desc", "asc"]);
@@ -16,6 +16,10 @@ const App = () => {
 	const [films, setFilms] = useState([]);
 	const [showAddForm, setShowAddForm] = useState(false);
 	const [selectedFilm, setSelectedFilm] = useState({});
+
+	useEffect(() => {
+		api.films.fetchAll().then((films) => setFilms(sortFilms(films)));
+	}, []);
 
 	const showForm = (e) => {
 		setShowAddForm(true);
@@ -29,10 +33,6 @@ const App = () => {
 
 	const cols = showAddForm ? "ten" : "sixteen";
 
-	useEffect(() => {
-		setFilms(sortFilms(items));
-	}, []);
-
 	const toggleFeatured = (id) => {
 		setFilms((films) =>
 			sortFilms(
@@ -43,8 +43,10 @@ const App = () => {
 		);
 	};
 
-	const addFilm = (film) => {
-		setFilms((x) => sortFilms([...x, { ...film, _id: id() }]));
+	const addFilm = (filmData) => {
+		api.films
+			.create(filmData)
+			.then((film) => setFilms((x) => sortFilms([...x, { ...film }])));
 		hideForm();
 	};
 

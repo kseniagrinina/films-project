@@ -11,7 +11,7 @@ const FilmsList = ({ films }) => {
 					No fims in the database yet.
 				</Message>
 			) : (
-				films.map((film) => <FilmCard film={film} key={film._id} />)
+				films.map((film) => <FilmCard key={film._id} film={film} />)
 			)}
 		</div>
 	);
