@@ -17,6 +17,7 @@ const initialData = {
 const FilmForm = ({ hideForm, saveFilm, film }) => {
 	const [data, setData] = useState(initialData);
 	const [errors, setErrors] = useState({});
+	const [loading, setLoading] = useState(false);
 
 	if (film._id && film._id !== data._id) {
 		setData(film);
@@ -65,14 +66,25 @@ const FilmForm = ({ hideForm, saveFilm, film }) => {
 		const errors = validate(data);
 		setErrors(errors);
 		if (Object.keys(errors).length === 0) {
-			saveFilm(data);
+			setLoading(true);
+			saveFilm(data)
+				// .then(() => {
+				// 	navigate("/films");
+				// })
+				.catch((err) => {
+					setErrors(err.response.data.errors);
+					setLoading(false);
+				});
 			setData(initialData);
-			setErrors();
+			setErrors({});
 		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className='ui form'>
+		<form
+			onSubmit={handleSubmit}
+			aria-label='film-form'
+			className={`ui form ${loading && "loading"}`}>
 			<div className='ui grid mb-3'>
 				<div className='two column row'>
 					<div className='ten wide column'>

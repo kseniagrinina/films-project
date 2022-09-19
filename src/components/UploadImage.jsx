@@ -7,7 +7,7 @@ const fallbackImg = "https://via.placeholder.com/250x250";
 const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 const MAX_SIZE = 1000000;
 
-const UploadImage = ({ img, updateImage }) => {
+const UploadImage = ({ img, updatePhoto }) => {
 	const [file, setFile] = useState(null);
 	const [renderImg, setRenderImg] = useState(fallbackImg);
 	const [imgError, setImgError] = useState(null);
@@ -43,7 +43,25 @@ const UploadImage = ({ img, updateImage }) => {
 		setFile(file);
 	}
 
-	function handleFile() {}
+	async function handleFile(e) {
+		if (!file || imgError) {
+			return;
+		}
+
+		const formData = new FormData();
+
+		formData.append("file", file);
+
+		await run(
+			axios.post("/api/upload", formData).then(async (res) => {
+				// await new Promise((resolve) => setTimeout(resolve, 2000));
+				updatePhoto(res.data.file);
+				setRenderImg(res.data.file);
+				setFile(null);
+				return res.data;
+			})
+		);
+	}
 
 	return (
 		<div className='upload-box'>

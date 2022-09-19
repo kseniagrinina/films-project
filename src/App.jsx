@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import _orderBy from "lodash/orderBy";
+import _find from "lodash/find";
 import FilmContext from "contexts/FilmContext";
 import FilmForm from "pages/FilmsPage/components/FilmForm";
 import FilmsList from "pages/FilmsPage/components/FilmsList";
@@ -8,6 +9,7 @@ import { generate as id } from "shortid";
 // import LoginForm from "pages/LoginPage/components/LoginForm";
 // import SignupForm from "pages/SignupPage/components/SignupForm";
 import api from "api";
+import { FullSpinner } from "styles/app";
 
 const sortFilms = (films) =>
 	_orderBy(films, ["featured", "title"], ["desc", "asc"]);
@@ -33,14 +35,9 @@ const App = () => {
 
 	const cols = showAddForm ? "ten" : "sixteen";
 
-	const toggleFeatured = (id) => {
-		setFilms((films) =>
-			sortFilms(
-				films.map((film) =>
-					film._id === id ? { ...film, featured: !film.featured } : film
-				)
-			)
-		);
+	const toggleFeatured = (_id) => {
+		const film = _find(films, { _id });
+		return updateFilm({ ...film, featured: !film.featured });
 	};
 
 	const addFilm = (filmData) => {
@@ -51,8 +48,10 @@ const App = () => {
 	};
 
 	const updateFilm = (film) => {
-		setFilms((x) => sortFilms(x.map((f) => (f._id === film._id ? film : f))));
-		hideForm();
+		return api.films.update(film).then((film) => {
+			setFilms((x) => sortFilms(x.map((f) => (f._id === film._id ? film : f))));
+			hideForm();
+		});
 	};
 
 	const saveFilm = (film) => {
@@ -60,7 +59,9 @@ const App = () => {
 	};
 
 	const deleteFilm = (film) => {
-		setFilms((x) => sortFilms(x.filter((f) => f._id !== film._id)));
+		return api.films.delete(film).then(() => {
+			setFilms((x) => sortFilms(x.filter((f) => f._id !== film._id)));
+		});
 	};
 
 	const selectedFilmForEdit = (selectedFilm) => {
